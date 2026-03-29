@@ -1,0 +1,41 @@
+version: "3.9"
+
+networks:
+  mas-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  qdrant_data:
+  model_cache:
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "50m"
+    max-file: "5"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mas_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: multi-agents
+      POSTGRES_USER: mas-admin
+      POSTGRES_PASSWORD: mas-password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - mas-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U mas-admin -d multi-agents" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging: *default-logging
