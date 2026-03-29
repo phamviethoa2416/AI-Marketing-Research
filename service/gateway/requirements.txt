@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+httpx
+sqlalchemy[asyncio]
+asyncpg
+alembic
+qdrant-client
+redis[asyncio]
+pydantic
+pydantic-settings
+prometheus-client
+structlog
+python-multipart
