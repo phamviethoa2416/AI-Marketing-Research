@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+FlagEmbedding
+torch
+numpy
+pydantic
+prometheus-client
+structlog
+httpx
+langchain-text-splitters
+langchain-community
+langchain-openai
+langchain-anthropic
+langchain-core
+faiss-cpu
+unstructured
+pypdf
