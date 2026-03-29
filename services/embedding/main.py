@@ -240,12 +240,12 @@ async def lifespan(app: FastAPI):
             pass
 
     MODEL_LOADED.set(0)
-    log.info("Embedding service shutting down...")
+    log.info("Embedding services shutting down...")
 
 
 app = FastAPI(
     title="Embedding Service",
-    description="A service that generates dense, sparse, or hybrid embeddings using a BGE-M3 model.",
+    description="A services that generates dense, sparse, or hybrid embeddings using a BGE-M3 model.",
     version="1.0",
     lifespan=lifespan,
 )

@@ -222,7 +222,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -305,7 +305,7 @@ async def search(
         client: httpx.AsyncClient = Depends(get_http_client),
 ):
     if not TAVILY_API_KEY:
-        raise HTTPException(status_code=503, detail="Search service not configured")
+        raise HTTPException(status_code=503, detail="Search services not configured")
 
     t0 = time.time()
     req_id = _request_id(request)
@@ -403,7 +403,11 @@ async def proxy_embed(
             content=body,
             headers={"Content-Type": "application/json"},
         )
-        return JSONResponse(status_code=r.status_code, content=r.json())
+        try:
+            body = r.json()
+        except Exception:
+            body = {"detail": r.text[:500]}
+        return JSONResponse(status_code=r.status_code, content=body)
     except httpx.RequestError as e:
         raise HTTPException(status_code=502, detail=str(e))
 
@@ -434,7 +438,11 @@ async def proxy_rerank(
             content=body,
             headers={"Content-Type": "application/json"},
         )
-        return JSONResponse(status_code=r.status_code, content=r.json())
+        try:
+            body = r.json()
+        except Exception:
+            body = {"detail": r.text[:500]}
+        return JSONResponse(status_code=r.status_code, content=body)
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
 

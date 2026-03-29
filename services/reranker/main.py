@@ -223,7 +223,7 @@ async def lifespan(app: FastAPI):
             pass
 
     MODEL_LOADED.set(0)
-    log.info("Reranker service shutting down...")
+    log.info("Reranker services shutting down...")
 
 
 app = FastAPI(
