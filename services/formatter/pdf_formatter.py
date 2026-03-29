@@ -309,14 +309,13 @@ def markdown_to_story(md: str, styles: dict) -> list:
 
 
 def _md_inline(text: str) -> str:
-    # Bold
+    text = text.replace("&", "&amp;").replace("<", "&lt;")
     text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
     # Italic
     text = re.sub(r"\*(.+?)\*", r"<i>\1</i>", text)
     # Inline code
     text = re.sub(r"`(.+?)`", r'<font name="Courier">\1</font>', text)
     # Escape raw & and < that aren't tags
-    # (Only needed outside tags — simplistic approach)
     return text
 
 
@@ -432,9 +431,9 @@ class PDFFormatter:
         # ── Table of Contents ──────────────────────────────────────────────────
         toc = TableOfContents()
         toc.levelStyles = [
-            ParagraphStyle("TOC1", fontName="Helvetica-Bold", fontSize=11,
+            ParagraphStyle("TOC1", fontName=FONT_BOLD, fontSize=11,
                            leftIndent=0, textColor=NAVY, spaceAfter=3),
-            ParagraphStyle("TOC2", fontName="Helvetica", fontSize=10,
+            ParagraphStyle("TOC2", fontName=FONT_REGULAR, fontSize=10,
                            leftIndent=16, textColor=GRAY, spaceAfter=2),
         ]
         story.append(Paragraph("Mục lục", styles["h1"]))

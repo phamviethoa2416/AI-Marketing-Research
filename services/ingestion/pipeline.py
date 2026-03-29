@@ -12,7 +12,7 @@ from typing import Iterator
 import httpx
 import tiktoken
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import PointStruct, SparseVector
+from qdrant_client.models import PointStruct, SparseVector
 
 log = logging.getLogger("ingestion")
 
@@ -98,7 +98,7 @@ class DOCXExtractor:
                 if text.strip():
                     parts.append(text.strip())
 
-            if tag == "tbl":
+            elif tag == "tbl":
                 rows_text: list[str] = []
                 for row in element.iter("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}tr"):
                     cells = []
@@ -218,9 +218,9 @@ class TokenChunker:
                         overlap_t = 0
                         for s in reversed(sent_buf):
                             overlap_t += self._count(s)
-                            overlap_sents.insert(0, s)
                             if overlap_t >= self.overlap:
                                 break
+                            overlap_sents.insert(0, s)
                         sent_buf = overlap_sents + [sent]
                         sent_tokens = sum(self._count(s) for s in sent_buf)
                     else:
